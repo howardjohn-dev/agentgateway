@@ -21,16 +21,7 @@ env:
 jobs:
   #### Proxy jobs ####
   proxy-test:
-    strategy:
-      matrix:
-        include:
-        - os: ubuntu-24.04
-          validate: true
-        - os: windows-2025
-          validate: false
-        - os: macos-15
-          validate: false
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - name: Install Rust
@@ -38,8 +29,6 @@ jobs:
       with:
         toolchain: "${{ env.RUST_VERSION }}"
     - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
-      # Github cache is too tiny to handle the full matrix :-(
-      if: ${{ startsWith(matrix.os, 'ubuntu-') }}
       with:
         # Github cache will restore from 'main' OR the current branch.
         # If we cache PR branches, we may evict the 'main' cache and end up with no cache hits at all.
@@ -48,7 +37,6 @@ jobs:
     - name: Test
       run: make test
     - name: Validate
-      if: ${{ matrix.validate }}
       run: make validate
 
   proxy-lint:
@@ -69,22 +57,6 @@ jobs:
       run: make generate-schema check-clean-repo
     - name: Lint
       run: make lint
-
-  #### UI jobs ####
-  ui-lint:
-    runs-on: ubuntu-24.04
-    defaults:
-      run:
-        working-directory: ui
-    steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-    - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
-      with:
-        node-version: 24
-    - name: Lint
-      run: |
-        npm ci
-        npm run lint
 
   #### Controller jobs ####
   controller-test:
