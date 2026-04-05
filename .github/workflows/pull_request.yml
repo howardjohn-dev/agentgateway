@@ -21,7 +21,7 @@ env:
 jobs:
   #### Proxy jobs ####
   proxy-test:
-    runs-on: ubuntu-24.04
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - name: Install Rust
@@ -40,7 +40,7 @@ jobs:
       run: make validate
 
   proxy-lint:
-    runs-on: ubuntu-24.04
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - name: Install Rust
@@ -60,7 +60,7 @@ jobs:
 
   #### Controller jobs ####
   controller-test:
-    runs-on: ubuntu-24.04
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6
@@ -73,7 +73,7 @@ jobs:
       run: go test -race ./...
 
   controller-lint:
-    runs-on: ubuntu-24.04
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6
@@ -93,7 +93,7 @@ jobs:
       run: make generate-apis check-clean-repo
 
   controller-e2e:
-    runs-on: ubuntu-24.04
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - name: Check Runner Info
@@ -145,7 +145,7 @@ jobs:
         cat controller/_test/ci-step-timings.log >> $GITHUB_STEP_SUMMARY
 
   controller-conformance:
-    runs-on: ubuntu-24.04
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - name: Install Rust
