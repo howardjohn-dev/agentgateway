@@ -1,4 +1,4 @@
-Test CI
+Test CI 2
 
 <div align="center">
   <picture>
