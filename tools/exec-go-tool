@@ -6,6 +6,18 @@ fi
 
 WD=$(cd "$(dirname "$0")"; pwd)
 
+if [ -n "${GOCACHEPROG:-}" ]; then
+  # With an external cache, go tool -n may print a temporary executable path
+  # that disappears when Go exits. Build an explicit output instead, keeping
+  # the caller's working directory when running the tool.
+  TOOL_DIR=$(mktemp -d) || exit 1
+  trap 'rm -rf "$TOOL_DIR"' EXIT
+  (cd "$WD" && go build -o "$TOOL_DIR/tool" "$1") || exit $?
+  shift
+  "$TOOL_DIR/tool" "$@"
+  exit $?
+fi
+
 TOOL=$(cd "$WD"; go tool -n "$1")
 shift
 exec "$TOOL" "$@"
