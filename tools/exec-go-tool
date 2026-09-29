@@ -12,9 +12,11 @@ if [ -n "${GOCACHEPROG:-}" ]; then
   # the caller's working directory when running the tool.
   TOOL_DIR=$(mktemp -d) || exit 1
   trap 'rm -rf "$TOOL_DIR"' EXIT
-  (cd "$WD" && go build -o "$TOOL_DIR/tool" "$1") || exit $?
+  # Generators use the executable basename in their generated-code headers.
+  TOOL="$TOOL_DIR/${1##*/}"
+  (cd "$WD" && go build -o "$TOOL" "$1") || exit $?
   shift
-  "$TOOL_DIR/tool" "$@"
+  "$TOOL" "$@"
   exit $?
 fi
 
