@@ -16,8 +16,6 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
-  # Disable the Go cache program injected by Blacksmith runners.
-  GOCACHEPROG: ""
   CARGO_TERM_COLOR: always
   CI: true
   RUST_VERSION: "1.98.0"
@@ -136,13 +134,10 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
-    - name: Set up controller Go build cache
+    - name: Set up controller Go
       uses: ./.github/actions/controller-build-cache
       with:
         go-version: "${{ env.GO_VERSION }}"
-        go-cache-name: controller-test
-        # PRs can restore the default branch caches, but only postsubmit rolls them forward.
-        save: ${{ github.ref == 'refs/heads/main' }}
     - name: Test
       run: go test -race ./...
 
@@ -152,13 +147,10 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
-    - name: Set up controller Go build cache
+    - name: Set up controller Go
       uses: ./.github/actions/controller-build-cache
       with:
         go-version: "${{ env.GO_VERSION }}"
-        go-cache-name: controller-lint
-        # PRs can restore the default branch caches, but only postsubmit rolls them forward.
-        save: ${{ github.ref == 'refs/heads/main' }}
     - name: Lint
       run: make -C controller analyze
     - name: go mod tidy
