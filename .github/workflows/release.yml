@@ -40,7 +40,6 @@ env:
   GOCACHEPROG: ""
   CARGO_TERM_COLOR: always
   CI: true
-  RUST_VERSION: "1.98.0"
   CARGO_BUILD_WARNINGS: deny
   GO_VERSION: "1.27.1"
   REGISTRY_IMAGE: ghcr.io/${{ github.repository_owner }}/agentgateway
@@ -431,9 +430,8 @@ jobs:
       with:
         node-version-file: ui/.nvmrc
     - name: Install Rust
-      uses: dtolnay/rust-toolchain@efa25f7f19611383d5b0ccf2d1c8914531636bf9 # master
+      uses: ./.github/actions/setup-rust
       with:
-        toolchain: "${{ env.RUST_VERSION }}"
         targets: ${{ matrix.target }}
     - name: Prepare Linux target
       if: ${{ matrix.target == 'x86_64-unknown-linux-musl' || matrix.target == 'aarch64-unknown-linux-musl' }}

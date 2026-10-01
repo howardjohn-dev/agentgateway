@@ -18,7 +18,6 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
   CI: true
-  RUST_VERSION: "1.98.0"
   CARGO_BUILD_WARNINGS: deny
   GO_VERSION: "1.27.1"
 
@@ -34,7 +33,7 @@ jobs:
     - name: Set up controller build caches
       uses: ./.github/actions/controller-build-cache
       with:
-        rust-version: "${{ env.RUST_VERSION }}"
+        rust: "true"
         go-version: "${{ env.GO_VERSION }}"
         # PRs can restore the default branch caches, but only postsubmit rolls them forward.
         save: ${{ github.ref == 'refs/heads/main' }}
