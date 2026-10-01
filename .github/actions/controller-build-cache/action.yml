@@ -35,7 +35,7 @@ runs:
     uses: ./.github/actions/rust-build-cache
     with:
       rust-version: ${{ inputs.rust-version }}
-      cache-key: controller-e2e
+      cache-key: controller-e2e-v2
       save: ${{ inputs.save }}
 
   - name: Install Go
