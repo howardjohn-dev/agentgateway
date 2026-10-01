@@ -7,19 +7,13 @@ fi
 WD=$(cd "$(dirname "$0")"; pwd)
 
 if [ -n "${GOCACHEPROG:-}" ]; then
-  # With an external cache, go tool -n may print a temporary executable path
-  # that disappears when Go exits. Build an explicit output instead, keeping
-  # the caller's working directory when running the tool.
-  TOOL_DIR=$(mktemp -d) || exit 1
-  trap 'rm -rf "$TOOL_DIR"' EXIT
-  # Generators use the executable basename in their generated-code headers.
-  TOOL="$TOOL_DIR/${1##*/}"
+  # Keep each package's executable, preserving its name for generated-code headers.
+  TOOL="$WD/.bin/$1"
+  mkdir -p "$(dirname "$TOOL")" || exit 1
+  # Let Go validate build inputs and reuse cached compilation/linking results.
   (cd "$WD" && go build -o "$TOOL" "$1") || exit $?
-  shift
-  "$TOOL" "$@"
-  exit $?
+else
+  TOOL=$(cd "$WD"; go tool -n "$1") || exit $?
 fi
-
-TOOL=$(cd "$WD"; go tool -n "$1")
 shift
 exec "$TOOL" "$@"
