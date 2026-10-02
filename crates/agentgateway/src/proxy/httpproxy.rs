@@ -2437,7 +2437,11 @@ async fn make_backend_call(
 		if let Some(path_match) = router.trace_path(&req) {
 			log.add(|log| log.path_match = Some(path_match));
 		}
-		let resolved = router.resolve(&mut req, &inputs.model_catalog).await;
+		let client = PolicyClient::new(inputs.clone()).with_parent(&req);
+		let resolved =  router
+			.resolve(&mut req, &inputs.model_catalog, &client)
+			.await
+		;
 		if let Some(original_model) = req.extensions_mut().remove::<model_router::OriginalModel>() {
 			log.add(|log| log.original_model = Some(original_model.0));
 		}
@@ -5066,6 +5070,7 @@ impl PolicyClient {
 				OutboundCallSubtype::Guardrail => "guardrail",
 				OutboundCallSubtype::RateLimit => "rate_limit",
 				OutboundCallSubtype::Oidc => "oidc",
+				OutboundCallSubtype::Callout => "callout",
 				_ => labels.subtype.as_str(),
 			},
 		})

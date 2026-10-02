@@ -12696,7 +12696,7 @@
           "description": "callout selects the target model by calling an external HTTP service.",
           "anyOf": [
             {
-              "$ref": "#/$defs/LocalLLMCalloutRouting"
+              "$ref": "#/$defs/VirtualModelCallout"
             },
             {
               "type": "null"
@@ -12819,8 +12819,8 @@
         "model"
       ]
     },
-    "LocalLLMCalloutRouting": {
-      "description": "A backend reference whose `host` URL may include a request path, such as `https://example.com/v1/route`.",
+    "VirtualModelCallout": {
+      "description": "Selects a virtual model's target by calling an external HTTP service.",
       "type": "object",
       "properties": {
         "policies": {
@@ -12861,7 +12861,8 @@
         },
         "failureMode": {
           "description": "Behavior when the callout fails, returns a non-2xx or non-JSON response, or selects an unknown model.\nDefaults to `failClosed`.",
-          "$ref": "#/$defs/LocalLLMCalloutFailureMode"
+          "$ref": "#/$defs/VirtualModelCalloutFailureMode",
+          "default": "failClosed"
         },
         "cache": {
           "description": "Reuse callout responses using CEL expressions as the cache key.\nOn a cache hit, `transformation` is evaluated against the cached response.\nKeying on a session identifier makes routing sticky for that session.",
@@ -12937,7 +12938,7 @@
         "transformation"
       ]
     },
-    "LocalLLMCalloutFailureMode": {
+    "VirtualModelCalloutFailureMode": {
       "oneOf": [
         {
           "description": "Reject the request.",
