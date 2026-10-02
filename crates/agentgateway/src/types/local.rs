@@ -32,10 +32,10 @@ use crate::types::agent::{
 	McpServerOverrides, McpTarget, McpTargetName, McpTargetSpec, OpenAPITarget, PathMatch,
 	PolicyPhase, PolicyTarget, PolicyType, ResourceName, Route, RouteBackendReference,
 	RouteBackendTarget, RouteGroupKey, RouteMatch, RouteName, ServerTLSConfig, SimpleBackend,
-	SimpleBackendReference, SimpleBackendReferenceWithPolicies, SimpleBackendWithPolicies,
-	SseTargetSpec, StreamableHTTPTargetSpec, TCPRoute, TCPRouteBackendReference, Target,
-	TargetedPolicy, TracingConfig, TrafficPolicy, TunnelProtocol, TypedResourceName,
-	validate_mcp_target_name,
+	SimpleBackendReference, SimpleBackendReferenceWithPolicies,
+	SimpleBackendReferenceWithPoliciesAndPath, SimpleBackendWithPolicies, SseTargetSpec,
+	StreamableHTTPTargetSpec, TCPRoute, TCPRouteBackendReference, Target, TargetedPolicy,
+	TracingConfig, TrafficPolicy, TunnelProtocol, TypedResourceName, validate_mcp_target_name,
 };
 use crate::types::discovery::{NamespacedHostname, Service};
 use crate::types::{backend, frontend};
@@ -544,6 +544,9 @@ pub struct LocalLLMVirtualModelRouting {
 	/// in order until the best match is found.
 	#[serde(default, skip_serializing_if = "Option::is_none")]
 	conditional: Option<LocalLLMConditionalRouting>,
+	/// callout selects the target model by calling an external HTTP service.
+	#[serde(default, skip_serializing_if = "Option::is_none")]
+	callout: Option<LocalLLMCalloutRouting>,
 }
 
 #[apply(schema_de!)]
@@ -588,6 +591,49 @@ pub struct LocalLLMConditionalTarget {
 	when: Option<Arc<cel::Expression>>,
 	/// model is resolved against llm.models using the same wildcard matching as client requests.
 	model: String,
+}
+
+#[apply(schema_de!)]
+// TODO: remove once callout routing is implemented.
+#[allow(dead_code)]
+pub struct LocalLLMCalloutRouting {
+	/// Service that selects the model, and the backend policies used when connecting to it.
+	/// A `host` URL may include the request path, such as `https://router.example.com/v1/route`.
+	#[serde(flatten)]
+	target: SimpleBackendReferenceWithPoliciesAndPath,
+	/// Headers to set on the callout request, computed from CEL expressions.
+	/// Keys may be header names or the `:path`, `:method`, and `:authority` pseudo-headers.
+	#[serde(default, skip_serializing_if = "Vec::is_empty")]
+	#[serde_as(as = "serde_with::Map<_, _>")]
+	headers: Vec<(crate::http::HeaderOrPseudo, Arc<cel::Expression>)>,
+	/// CEL expression that computes the callout request body.
+	/// Strings and bytes are used directly; other values are JSON-encoded.
+	/// If unset, the original request body is forwarded.
+	#[serde(default, skip_serializing_if = "Option::is_none")]
+	body: Option<Arc<cel::Expression>>,
+	/// CEL expressions that compute request payload fields from the callout response, overriding existing values.
+	/// `callout.headers` holds the response headers and `callout.body` the decoded JSON response body.
+	/// `model` is required and selects the target from `llm.models`.
+	transformation: HashMap<String, Arc<cel::Expression>>,
+	/// Behavior when the callout fails, returns a non-2xx or non-JSON response, or selects an unknown model.
+	/// Defaults to `failClosed`.
+	#[serde(default)]
+	failure_mode: LocalLLMCalloutFailureMode,
+	/// Reuse callout responses using CEL expressions as the cache key.
+	/// On a cache hit, `transformation` is evaluated against the cached response.
+	/// Keying on a session identifier makes routing sticky for that session.
+	#[serde(default, skip_serializing_if = "Option::is_none")]
+	cache: Option<crate::http::ext_authz::CacheConfig>,
+}
+
+#[apply(schema_de!)]
+#[derive(Default)]
+pub enum LocalLLMCalloutFailureMode {
+	/// Reject the request.
+	#[default]
+	FailClosed,
+	/// Route to this model, which is resolved against llm.models, without applying `transformation`.
+	Fallback(String),
 }
 
 #[apply(schema_de!)]
@@ -4203,6 +4249,7 @@ enum LocalLLMVirtualRoutingStrategy<'a> {
 	Weighted(&'a LocalLLMWeightedRouting),
 	Failover(&'a LocalLLMFailoverRouting),
 	Conditional(&'a LocalLLMConditionalRouting),
+	Callout(&'a LocalLLMCalloutRouting),
 }
 
 fn llm_model_matches(pattern: &str, model: &str) -> anyhow::Result<bool> {
@@ -4234,6 +4281,13 @@ impl<'a> LocalLLMVirtualRoutingStrategy<'a> {
 					.iter()
 					.map(|target| target.model.as_str()),
 			),
+			Self::Callout(callout) => Box::new(
+				match &callout.failure_mode {
+					LocalLLMCalloutFailureMode::Fallback(model) => Some(model.as_str()),
+					LocalLLMCalloutFailureMode::FailClosed => None,
+				}
+				.into_iter(),
+			),
 		}
 	}
 }
@@ -4242,7 +4296,8 @@ impl LocalLLMVirtualModel {
 	fn routing_strategy(&self) -> anyhow::Result<LocalLLMVirtualRoutingStrategy<'_>> {
 		let strategy_count = usize::from(self.routing.weighted.is_some())
 			+ usize::from(self.routing.failover.is_some())
-			+ usize::from(self.routing.conditional.is_some());
+			+ usize::from(self.routing.conditional.is_some())
+			+ usize::from(self.routing.callout.is_some());
 		if strategy_count != 1 {
 			bail!(
 				"virtual model {} must specify exactly one routing strategy",
@@ -4268,6 +4323,15 @@ impl LocalLLMVirtualModel {
 				);
 			}
 			return Ok(LocalLLMVirtualRoutingStrategy::Conditional(conditional));
+		}
+		if let Some(callout) = self.routing.callout.as_ref() {
+			if !callout.transformation.contains_key("model") {
+				bail!(
+					"virtual model {} callout transformation must set model",
+					self.name
+				);
+			}
+			return Ok(LocalLLMVirtualRoutingStrategy::Callout(callout));
 		}
 		if let Some(weighted) = self.routing.weighted.as_ref() {
 			if weighted.targets.is_empty() {
@@ -4793,6 +4857,12 @@ async fn convert_llm_config(
 						})
 						.collect(),
 				)
+			},
+			LocalLLMVirtualRoutingStrategy::Callout(_) => {
+				bail!(
+					"virtual model {} callout routing is not yet implemented",
+					virtual_model.name
+				);
 			},
 			LocalLLMVirtualRoutingStrategy::Failover(failover) => {
 				let provider_groups = failover
