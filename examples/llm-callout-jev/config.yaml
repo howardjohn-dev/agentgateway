@@ -1,12 +1,4 @@
 # yaml-language-server: $schema=https://agentgateway.dev/schema/config
-frontendPolicies:
-  accessLog:
-    database:
-      llm: full
-config:
-  database:
-    # In memory request storage only
-    url: 'sqlite::memory:'
 gateways:
   default:
     port: 4000
