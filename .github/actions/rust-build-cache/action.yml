@@ -1,12 +1,12 @@
 name: Rust build cache
-description: Set up Rust and restore source-aware workspace build artifacts
+description: Set up Rust and mount source-aware workspace build artifacts
 
 inputs:
   cache-key:
     description: Cache namespace shared by equivalent jobs
     required: true
   save:
-    description: Save a missing cache after a successful job
+    description: Commit cache changes after a successful job
     required: false
     default: "false"
 
@@ -29,52 +29,76 @@ runs:
         https://raw.githubusercontent.com/howardjohn/git-restore-mtime-action/b77092831982028ae46f86c64831e6e0dde7ee8f/git-restore-mtime |
         "$python_command" - --commit-time
 
-  # rust-cache includes nested .cargo/config.toml files in its exact key, but
-  # excludes them from its fallback prefix. The crates/ tree therefore rolls the
-  # cache forward after Rust changes without making unrelated changes write it.
+  - name: Locate Cargo home
+    if: ${{ runner.os == 'Linux' }}
+    id: cargo-home
+    shell: bash
+    run: echo "path=${CARGO_HOME:-$HOME/.cargo}" >> "$GITHUB_OUTPUT"
+
+  - name: Mount Rust target cache
+    if: ${{ runner.os == 'Linux' }}
+    uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1.7.2
+    with:
+      key: ${{ github.repository }}-rust-target-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
+      path: target
+      commit: ${{ inputs.save == 'true' && 'on-change' || 'false' }}
+
+  - name: Mount Cargo registry cache
+    if: ${{ runner.os == 'Linux' }}
+    uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1.7.2
+    with:
+      key: ${{ github.repository }}-rust-registry-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
+      path: ${{ steps.cargo-home.outputs.path }}/registry
+      commit: ${{ inputs.save == 'true' && 'on-change' || 'false' }}
+
+  - name: Mount Cargo git cache
+    if: ${{ runner.os == 'Linux' }}
+    uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1.7.2
+    with:
+      key: ${{ github.repository }}-rust-git-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
+      path: ${{ steps.cargo-home.outputs.path }}/git
+      commit: ${{ inputs.save == 'true' && 'on-change' || 'false' }}
+
+  - name: Enable Rust cache access tracking
+    if: ${{ runner.os == 'Linux' }}
+    shell: bash
+    run: |
+      if mountpoint -q target; then
+        sudo mount -o remount,strictatime target
+      fi
+
+  # Composite post steps run in reverse order, so this sweeps target before
+  # Sticky Disk snapshots it.
+  - name: Track used Rust build artifacts
+    if: ${{ runner.os == 'Linux' }}
+    uses: BD103/cargo-sweep@28e53e462f3658c03a16ebd79651d2c168a27d4d # v2
+
   - name: Set Rust cache generation
+    if: ${{ runner.os == 'Linux' }}
     id: rust-cache-generation
     shell: bash
     run: |
-      mkdir -p .github/rust-cache/.cargo .github/rust-cache-state
+      mkdir -p target/.rust-cache-state
 
       crates_generation="$(git rev-parse HEAD:crates)"
-
-      # v2 ensures immutable caches created before the commit marker was added
-      # are restored only as fallbacks, then replaced by a marker-bearing cache.
-      printf '# generation-v2 = %s\n' "$crates_generation" > .github/rust-cache/.cargo/config.toml
       {
         echo "commit=$(git rev-parse HEAD)"
         echo "crates=$crates_generation"
       } >> "$GITHUB_OUTPUT"
 
-  - name: Restore Rust cache
-    uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
-    with:
-      shared-key: ${{ inputs.cache-key }}
-      # Workspace artifacts are normally omitted. Stable source mtimes and the
-      # source-aware key above make them useful across fresh runners.
-      cache-workspace-crates: true
-      # Keep the source commit and crates generation that produced the target
-      # artifacts so fallback restores can invalidate only changed inputs.
-      cache-directories: .github/rust-cache-state
-      save-if: ${{ inputs.save }}
-
-  # The exact cache key contains the crates tree, but rust-cache deliberately
-  # omits it from the fallback prefix. A fallback can therefore come from a
-  # newer main build than an older PR commit. Since git-restore-mtime preserves
-  # that old commit time, Cargo could incorrectly accept the newer artifacts.
+  # Stable source mtimes can make restored workspace artifacts look current
+  # even when they came from a different source revision.
   # Touch every input whose content differs from the commit that wrote the cache
-  # after restoring it, making the source unambiguously newer. For legacy caches
-  # without a producer marker, use the checkout's first parent as an approximation.
-  - name: Invalidate changed Rust sources from fallback cache
+  # so Cargo invalidates the affected artifacts.
+  - name: Invalidate changed Rust sources
+    if: ${{ runner.os == 'Linux' }}
     shell: bash
     env:
       CURRENT_COMMIT: ${{ steps.rust-cache-generation.outputs.commit }}
       CURRENT_CRATES: ${{ steps.rust-cache-generation.outputs.crates }}
     run: |
-      cached_commit="$(cat .github/rust-cache-state/commit 2>/dev/null || true)"
-      cached_crates="$(cat .github/rust-cache-state/crates 2>/dev/null || true)"
+      cached_commit="$(cat target/.rust-cache-state/commit 2>/dev/null || true)"
+      cached_crates="$(cat target/.rust-cache-state/crates 2>/dev/null || true)"
 
       echo "Cached Rust commit: ${cached_commit:-missing}"
       echo "Cached crates generation: ${cached_crates:-missing}"
@@ -82,16 +106,16 @@ runs:
       echo "Current crates generation: $CURRENT_CRATES"
 
       if [[ "$cached_crates" != "$CURRENT_CRATES" ]]; then
-        # Legacy caches predate the producer-commit marker. Approximate them
-        # with the checked-out commit's first parent: for GitHub PR merge refs
-        # this is the main revision the PR was tested against.
+        # A fresh disk has no producer-commit marker. Approximate it with the
+        # checked-out commit's first parent: for GitHub PR merge refs this is
+        # the main revision the PR was tested against.
         if ! [[ "$cached_commit" =~ ^[0-9a-f]{40}$ ]] || ! git cat-file -e "${cached_commit}^{commit}"; then
           cached_commit="$(git rev-parse "${CURRENT_COMMIT}^1" 2>/dev/null || true)"
           echo "Approximated cached Rust commit: ${cached_commit:-unavailable}"
         fi
 
         if [[ "$cached_commit" =~ ^[0-9a-f]{40}$ ]] && git cat-file -e "${cached_commit}^{commit}"; then
-          echo "Rust sources differ from fallback cache; touching changed inputs"
+          echo "Rust sources differ from the cached build; touching changed inputs"
           git diff --name-only -z --diff-filter=ACMRTUXB "$cached_commit" "$CURRENT_COMMIT" -- crates |
           while IFS= read -r -d '' changed_file; do
             if [[ -e "$changed_file" ]]; then
@@ -120,6 +144,5 @@ runs:
         echo "Crates generation matches; restored workspace artifacts are current"
       fi
 
-      rm -f .github/rust-cache-state/protos
-      printf '%s\n' "$CURRENT_COMMIT" > .github/rust-cache-state/commit
-      printf '%s\n' "$CURRENT_CRATES" > .github/rust-cache-state/crates
+      printf '%s\n' "$CURRENT_COMMIT" > target/.rust-cache-state/commit
+      printf '%s\n' "$CURRENT_CRATES" > target/.rust-cache-state/crates
