@@ -23,25 +23,11 @@ env:
 jobs:
   #### Proxy jobs ####
   proxy-test:
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    name: Proxy Test
     env:
-      # Test binaries do not need debug symbols in CI. In particular, generating
-      # and linking MSVC PDBs accounts for a large part of the Windows build.
+      # Test binaries do not need debug symbols in CI.
       CARGO_PROFILE_TEST_DEBUG: 0
-      # This target-specific setting has no effect on the Linux and macOS matrix
-      # entries. lld-link is bundled with LLVM on the Windows runner and is much
-      # faster than the default MSVC linker for these large test executables.
-      CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: lld-link.exe
-    strategy:
-      matrix:
-        include:
-        - os: blacksmith-4vcpu-ubuntu-2404
-          name: "Proxy Test"
-        - os: windows-2025
-          name: "Proxy Test (Windows)"
-        - os: macos-15
-          name: "Proxy Test (Mac)"
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.name }}
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
@@ -55,12 +41,11 @@ jobs:
         # PRs restore the default branch cache; only postsubmit rolls it forward.
         save: ${{ github.ref == 'refs/heads/main' }}
     - name: Start validation dependencies
-      if: ${{ startsWith(matrix.os, 'blacksmith-') }}
       run: tools/manage-validation-deps.sh start
     - name: Test
       run: make test
       env:
-        KEYCLOAK_AVAILABLE: ${{ startsWith(matrix.os, 'blacksmith-') && '1' || '' }}
+        KEYCLOAK_AVAILABLE: 1
         # Generate Cargo's per-crate build report for the artifact below.
         TIMINGS: true
     - name: Upload cargo timings
@@ -70,7 +55,7 @@ jobs:
         path: target/cargo-timings/cargo-timing*.html
         retention-days: 2
     - name: Stop validation dependencies
-      if: ${{ always() && startsWith(matrix.os, 'blacksmith-') }}
+      if: ${{ always() }}
       run: tools/manage-validation-deps.sh stop
 
   proxy-lint:

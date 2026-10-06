@@ -1,2 +1,2 @@
-#[rustfmt::skip]
+#[rustfmt::skip] // hi
 fn main() -> anyhow::Result<()> { agentgateway_app::run() }
