@@ -123,7 +123,6 @@ def main() -> None:
         name
         for package in packages
         for target in package["targets"]
-        if {"lib", "proc-macro"}.intersection(target["kind"])
         for name in (
             target["name"].replace("-", "_"),
             f"lib{target['name'].replace('-', '_')}",

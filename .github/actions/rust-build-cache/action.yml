@@ -41,7 +41,7 @@ runs:
     with:
       key: ${{ github.repository }}-rust-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
       path: .github/rust-cache
-      commit: ${{ inputs.save == 'true' && 'on-change' || 'false' }}
+      commit: ${{ inputs.save }}
 
   - name: Configure Rust cache paths
     if: ${{ runner.os == 'Linux' }}
