@@ -35,36 +35,31 @@ runs:
     shell: bash
     run: echo "path=${CARGO_HOME:-$HOME/.cargo}" >> "$GITHUB_OUTPUT"
 
-  - name: Mount Rust target cache
+  - name: Mount Rust cache
     if: ${{ runner.os == 'Linux' }}
     uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1.7.2
     with:
-      key: ${{ github.repository }}-rust-target-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
-      path: target
+      key: ${{ github.repository }}-rust-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
+      path: .github/rust-cache
       commit: ${{ inputs.save == 'true' && 'on-change' || 'false' }}
 
-  - name: Mount Cargo registry cache
+  - name: Configure Rust cache paths
     if: ${{ runner.os == 'Linux' }}
-    uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1.7.2
-    with:
-      key: ${{ github.repository }}-rust-registry-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
-      path: ${{ steps.cargo-home.outputs.path }}/registry
-      commit: ${{ inputs.save == 'true' && 'on-change' || 'false' }}
-
-  - name: Mount Cargo git cache
-    if: ${{ runner.os == 'Linux' }}
-    uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1.7.2
-    with:
-      key: ${{ github.repository }}-rust-git-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
-      path: ${{ steps.cargo-home.outputs.path }}/git
-      commit: ${{ inputs.save == 'true' && 'on-change' || 'false' }}
+    shell: bash
+    run: |
+      cache_root="$GITHUB_WORKSPACE/.github/rust-cache"
+      cargo_home="${{ steps.cargo-home.outputs.path }}"
+      mkdir -p "$cache_root/target" "$cache_root/registry" "$cache_root/git" "$cargo_home"
+      ln -s "$cache_root/target" target
+      ln -s "$cache_root/registry" "$cargo_home/registry"
+      ln -s "$cache_root/git" "$cargo_home/git"
 
   - name: Enable Rust cache access tracking
     if: ${{ runner.os == 'Linux' }}
     shell: bash
     run: |
-      if mountpoint -q target; then
-        sudo mount -o remount,strictatime target
+      if mountpoint -q .github/rust-cache; then
+        sudo mount -o remount,strictatime .github/rust-cache
       fi
 
   # Composite post steps run in reverse order, so this sweeps target before
