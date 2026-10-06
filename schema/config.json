@@ -7051,7 +7051,7 @@
           ]
         },
         "cache": {
-          "description": "Cache authorization results using CEL expressions as the cache key.\nWarning: the safety of this feature depends on the cache key accurately capturing the fields\nthe server operates on. For example, if you return a different result based on header A but only\ncache header B, users may get incorrect cache hits.",
+          "description": "Cache authorization results using CEL expressions as the cache key.\nWarning: the safety of this feature depends on the cache key accurately capturing the fields\nthe server operates on. For example, if you return a different result based on header A but only\ncache header B, users may get incorrect cache hits.\nThe TTL is evaluated after the authorization response has been applied to the request.",
           "anyOf": [
             {
               "$ref": "#/$defs/CacheConfig"
@@ -7294,11 +7294,11 @@
           }
         },
         "ttl": {
-          "description": "CEL expression that returns how long cached authorization results are reused.\nThe expression is evaluated after the authorization response has been applied\nto the request, and must return either a duration or timestamp.",
+          "description": "CEL expression that returns how long cached results are reused.\nMust return either a duration or timestamp.",
           "$ref": "#/$defs/Expression"
         },
         "maxEntries": {
-          "description": "Maximum number of authorization results to keep in the cache.",
+          "description": "Maximum number of results to keep in the cache.",
           "type": "integer",
           "format": "uint",
           "minimum": 0,
@@ -7356,7 +7356,7 @@
           ]
         },
         "cache": {
-          "description": "Cache authorization results using CEL expressions as the cache key.\nWarning: the safety of this feature depends on the cache key accurately capturing the fields\nthe server operates on. For example, if you return a different result based on header A but only\ncache header B, users may get incorrect cache hits.",
+          "description": "Cache authorization results using CEL expressions as the cache key.\nWarning: the safety of this feature depends on the cache key accurately capturing the fields\nthe server operates on. For example, if you return a different result based on header A but only\ncache header B, users may get incorrect cache hits.\nThe TTL is evaluated after the authorization response has been applied to the request.",
           "anyOf": [
             {
               "$ref": "#/$defs/CacheConfig"
@@ -12865,7 +12865,7 @@
           "default": "failClosed"
         },
         "cache": {
-          "description": "Reuse callout responses using CEL expressions as the cache key.\nOn a cache hit, `transformation` is evaluated against the cached response.\nKeying on a session identifier makes routing sticky for that session.",
+          "description": "Reuse callout responses using CEL expressions as the cache key.\nOn a cache hit, `transformation` is evaluated against the cached response.\nKeying on a session identifier makes routing sticky for that session.\nThe TTL is evaluated with `callout` available, before `transformation` is applied.",
           "anyOf": [
             {
               "$ref": "#/$defs/CacheConfig"

@@ -466,10 +466,10 @@
 |`binds[].listeners[].routes[].policies.extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`binds[].listeners[].routes[].policies.extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`binds[].listeners[].routes[].policies.extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`binds[].listeners[].routes[].policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`binds[].listeners[].routes[].policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`binds[].listeners[].routes[].policies.extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`binds[].listeners[].routes[].policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`binds[].listeners[].routes[].policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`binds[].listeners[].routes[].policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`binds[].listeners[].routes[].policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`binds[].listeners[].routes[].policies.extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`binds[].listeners[].routes[].policies.extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`binds[].listeners[].routes[].policies.extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -494,10 +494,10 @@
 |`binds[].listeners[].routes[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`binds[].listeners[].routes[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`binds[].listeners[].routes[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`binds[].listeners[].routes[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`binds[].listeners[].routes[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`binds[].listeners[].routes[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`binds[].listeners[].routes[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`binds[].listeners[].routes[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`binds[].listeners[].routes[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`binds[].listeners[].routes[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`binds[].listeners[].routes[].policies.extProc`|object|Send request and response data to an external processing service.|
 |`binds[].listeners[].routes[].policies.extProc.conditional`|[]object|conditional policy entries. An entry without a condition must be the final fallback.|
 |`binds[].listeners[].routes[].policies.extProc.conditional[].service`|object|Service reference. Service must be defined in the top level services list.|
@@ -814,10 +814,10 @@
 |`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`binds[].listeners[].routes[].backends[].ai.policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`binds[].listeners[].routes[].backends[].ai.policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`binds[].listeners[].routes[].backends[].ai.policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`binds[].listeners[].routes[].backends[].ai.policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -1020,10 +1020,10 @@
 |`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`binds[].listeners[].routes[].backends[].ai.groups[].providers[].policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -1188,10 +1188,10 @@
 |`binds[].listeners[].routes[].backends[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`binds[].listeners[].routes[].backends[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`binds[].listeners[].routes[].backends[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`binds[].listeners[].routes[].backends[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`binds[].listeners[].routes[].backends[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`binds[].listeners[].routes[].backends[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`binds[].listeners[].routes[].backends[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`binds[].listeners[].routes[].backends[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`binds[].listeners[].routes[].backends[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`binds[].listeners[].routes[].backends[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`binds[].listeners[].routes[].backends[].policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`binds[].listeners[].routes[].backends[].policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`binds[].listeners[].routes[].backends[].policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -1379,10 +1379,10 @@
 |`binds[].listeners[].policies.extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`binds[].listeners[].policies.extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`binds[].listeners[].policies.extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`binds[].listeners[].policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`binds[].listeners[].policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`binds[].listeners[].policies.extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`binds[].listeners[].policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`binds[].listeners[].policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`binds[].listeners[].policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`binds[].listeners[].policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`binds[].listeners[].policies.extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`binds[].listeners[].policies.extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`binds[].listeners[].policies.extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -1407,10 +1407,10 @@
 |`binds[].listeners[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`binds[].listeners[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`binds[].listeners[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`binds[].listeners[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`binds[].listeners[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`binds[].listeners[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`binds[].listeners[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`binds[].listeners[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`binds[].listeners[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`binds[].listeners[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`binds[].listeners[].policies.extProc`|object|Send request and response data to an external processing service.|
 |`binds[].listeners[].policies.extProc.conditional`|[]object|conditional policy entries. An entry without a condition must be the final fallback.|
 |`binds[].listeners[].policies.extProc.conditional[].service`|object|Service reference. Service must be defined in the top level services list.|
@@ -1586,10 +1586,10 @@
 |`frontendPolicies.networkExtAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`frontendPolicies.networkExtAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`frontendPolicies.networkExtAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`frontendPolicies.networkExtAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`frontendPolicies.networkExtAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`frontendPolicies.networkExtAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`frontendPolicies.networkExtAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`frontendPolicies.networkExtAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`frontendPolicies.networkExtAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`frontendPolicies.networkExtAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`frontendPolicies.substrateEgressActorResolution`|object|Validate the originating actor before accepting a CONNECT tunnel.|
 |`frontendPolicies.substrateEgressActorResolution.service`|object|Service reference. Service must be defined in the top level services list.|
 |`frontendPolicies.substrateEgressActorResolution.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
@@ -2003,10 +2003,10 @@
 |`policies[].policy.extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`policies[].policy.extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`policies[].policy.extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`policies[].policy.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`policies[].policy.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`policies[].policy.extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`policies[].policy.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`policies[].policy.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`policies[].policy.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`policies[].policy.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`policies[].policy.extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`policies[].policy.extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`policies[].policy.extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -2031,10 +2031,10 @@
 |`policies[].policy.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`policies[].policy.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`policies[].policy.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`policies[].policy.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`policies[].policy.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`policies[].policy.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`policies[].policy.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`policies[].policy.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`policies[].policy.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`policies[].policy.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`policies[].policy.extProc`|object|Send request and response data to an external processing service.|
 |`policies[].policy.extProc.conditional`|[]object|conditional policy entries. An entry without a condition must be the final fallback.|
 |`policies[].policy.extProc.conditional[].service`|object|Service reference. Service must be defined in the top level services list.|
@@ -2351,10 +2351,10 @@
 |`backends[].ai.policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`backends[].ai.policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`backends[].ai.policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`backends[].ai.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`backends[].ai.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`backends[].ai.policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`backends[].ai.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`backends[].ai.policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`backends[].ai.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`backends[].ai.policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`backends[].ai.policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`backends[].ai.policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`backends[].ai.policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -2557,10 +2557,10 @@
 |`backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`backends[].ai.groups[].providers[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`backends[].ai.groups[].providers[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`backends[].ai.groups[].providers[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`backends[].ai.groups[].providers[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`backends[].ai.groups[].providers[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`backends[].ai.groups[].providers[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`backends[].ai.groups[].providers[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`backends[].ai.groups[].providers[].policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`backends[].ai.groups[].providers[].policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`backends[].ai.groups[].providers[].policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -2723,10 +2723,10 @@
 |`backends[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`backends[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`backends[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`backends[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`backends[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`backends[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`backends[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`backends[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`backends[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`backends[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`backends[].policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`backends[].policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`backends[].policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -3120,10 +3120,10 @@
 |`routeGroups[].routes[].policies.extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routeGroups[].routes[].policies.extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routeGroups[].routes[].policies.extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routeGroups[].routes[].policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routeGroups[].routes[].policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routeGroups[].routes[].policies.extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routeGroups[].routes[].policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routeGroups[].routes[].policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routeGroups[].routes[].policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routeGroups[].routes[].policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routeGroups[].routes[].policies.extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`routeGroups[].routes[].policies.extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`routeGroups[].routes[].policies.extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -3148,10 +3148,10 @@
 |`routeGroups[].routes[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routeGroups[].routes[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routeGroups[].routes[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routeGroups[].routes[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routeGroups[].routes[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routeGroups[].routes[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routeGroups[].routes[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routeGroups[].routes[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routeGroups[].routes[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routeGroups[].routes[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routeGroups[].routes[].policies.extProc`|object|Send request and response data to an external processing service.|
 |`routeGroups[].routes[].policies.extProc.conditional`|[]object|conditional policy entries. An entry without a condition must be the final fallback.|
 |`routeGroups[].routes[].policies.extProc.conditional[].service`|object|Service reference. Service must be defined in the top level services list.|
@@ -3468,10 +3468,10 @@
 |`routeGroups[].routes[].backends[].ai.policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routeGroups[].routes[].backends[].ai.policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routeGroups[].routes[].backends[].ai.policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routeGroups[].routes[].backends[].ai.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routeGroups[].routes[].backends[].ai.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routeGroups[].routes[].backends[].ai.policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routeGroups[].routes[].backends[].ai.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routeGroups[].routes[].backends[].ai.policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routeGroups[].routes[].backends[].ai.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routeGroups[].routes[].backends[].ai.policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routeGroups[].routes[].backends[].ai.policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`routeGroups[].routes[].backends[].ai.policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`routeGroups[].routes[].backends[].ai.policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -3674,10 +3674,10 @@
 |`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`routeGroups[].routes[].backends[].ai.groups[].providers[].policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -3842,10 +3842,10 @@
 |`routeGroups[].routes[].backends[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routeGroups[].routes[].backends[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routeGroups[].routes[].backends[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routeGroups[].routes[].backends[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routeGroups[].routes[].backends[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routeGroups[].routes[].backends[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routeGroups[].routes[].backends[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routeGroups[].routes[].backends[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routeGroups[].routes[].backends[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routeGroups[].routes[].backends[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routeGroups[].routes[].backends[].policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`routeGroups[].routes[].backends[].policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`routeGroups[].routes[].backends[].policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -4005,10 +4005,10 @@
 |`gateways.*.listeners[].extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`gateways.*.listeners[].extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`gateways.*.listeners[].extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`gateways.*.listeners[].extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`gateways.*.listeners[].extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`gateways.*.listeners[].extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`gateways.*.listeners[].extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`gateways.*.listeners[].extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`gateways.*.listeners[].extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`gateways.*.listeners[].extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`gateways.*.listeners[].extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`gateways.*.listeners[].extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`gateways.*.listeners[].extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -4033,10 +4033,10 @@
 |`gateways.*.listeners[].extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`gateways.*.listeners[].extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`gateways.*.listeners[].extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`gateways.*.listeners[].extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`gateways.*.listeners[].extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`gateways.*.listeners[].extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`gateways.*.listeners[].extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`gateways.*.listeners[].extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`gateways.*.listeners[].extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`gateways.*.listeners[].extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`gateways.*.listeners[].extProc`|object|Send request and response data to an external processing service.|
 |`gateways.*.listeners[].extProc.conditional`|[]object|conditional policy entries. An entry without a condition must be the final fallback.|
 |`gateways.*.listeners[].extProc.conditional[].service`|object|Service reference. Service must be defined in the top level services list.|
@@ -4244,10 +4244,10 @@
 |`gateways.*.extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`gateways.*.extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`gateways.*.extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`gateways.*.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`gateways.*.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`gateways.*.extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`gateways.*.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`gateways.*.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`gateways.*.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`gateways.*.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`gateways.*.extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`gateways.*.extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`gateways.*.extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -4272,10 +4272,10 @@
 |`gateways.*.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`gateways.*.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`gateways.*.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`gateways.*.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`gateways.*.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`gateways.*.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`gateways.*.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`gateways.*.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`gateways.*.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`gateways.*.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`gateways.*.extProc`|object|Send request and response data to an external processing service.|
 |`gateways.*.extProc.conditional`|[]object|conditional policy entries. An entry without a condition must be the final fallback.|
 |`gateways.*.extProc.conditional[].service`|object|Service reference. Service must be defined in the top level services list.|
@@ -4724,10 +4724,10 @@
 |`routes[].policies.extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routes[].policies.extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routes[].policies.extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routes[].policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routes[].policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routes[].policies.extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routes[].policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routes[].policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routes[].policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routes[].policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routes[].policies.extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`routes[].policies.extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`routes[].policies.extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -4752,10 +4752,10 @@
 |`routes[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routes[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routes[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routes[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routes[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routes[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routes[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routes[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routes[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routes[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routes[].policies.extProc`|object|Send request and response data to an external processing service.|
 |`routes[].policies.extProc.conditional`|[]object|conditional policy entries. An entry without a condition must be the final fallback.|
 |`routes[].policies.extProc.conditional[].service`|object|Service reference. Service must be defined in the top level services list.|
@@ -5072,10 +5072,10 @@
 |`routes[].backends[].ai.policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routes[].backends[].ai.policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routes[].backends[].ai.policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routes[].backends[].ai.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routes[].backends[].ai.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routes[].backends[].ai.policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routes[].backends[].ai.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routes[].backends[].ai.policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routes[].backends[].ai.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routes[].backends[].ai.policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routes[].backends[].ai.policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`routes[].backends[].ai.policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`routes[].backends[].ai.policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -5278,10 +5278,10 @@
 |`routes[].backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routes[].backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routes[].backends[].ai.groups[].providers[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routes[].backends[].ai.groups[].providers[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routes[].backends[].ai.groups[].providers[].policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`routes[].backends[].ai.groups[].providers[].policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`routes[].backends[].ai.groups[].providers[].policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -5446,10 +5446,10 @@
 |`routes[].backends[].policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`routes[].backends[].policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`routes[].backends[].policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`routes[].backends[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`routes[].backends[].policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`routes[].backends[].policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`routes[].backends[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`routes[].backends[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`routes[].backends[].policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`routes[].backends[].policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`routes[].backends[].policies.authorization`|object|Authorize incoming requests after this backend is selected.|
 |`routes[].backends[].policies.authorization.rules`|[]object|CEL authorization rules to evaluate for a request.|
 |`routes[].backends[].policies.authorization.rules[].allow`|string|Allow the request when this CEL expression is true.|
@@ -5796,289 +5796,16 @@
 |`llm.virtualModels[].routing.callout.service.port`|integer|Port on the target Service to route to.|
 |`llm.virtualModels[].routing.callout.host`|string|Hostname or IP address|
 |`llm.virtualModels[].routing.callout.backend`|string|Explicit backend reference. Backend must be defined in the top level backends list|
-|`llm.virtualModels[].routing.callout.policies`|object|Backend policies used when connecting to the service.|
-|`llm.virtualModels[].routing.callout.policies.requestHeaderModifier`|object|Modify request headers before forwarding to this backend.|
-|`llm.virtualModels[].routing.callout.policies.requestHeaderModifier.add`|object|Headers to append without replacing existing values.|
-|`llm.virtualModels[].routing.callout.policies.requestHeaderModifier.set`|object|Headers to set, replacing any existing values.|
-|`llm.virtualModels[].routing.callout.policies.requestHeaderModifier.remove`|[]string|Header names to remove.|
-|`llm.virtualModels[].routing.callout.policies.transformations`|object|Modify request and response data for this backend.|
-|`llm.virtualModels[].routing.callout.policies.transformations.request`|object|Transform the request before it is forwarded.|
-|`llm.virtualModels[].routing.callout.policies.transformations.request.add`|object|Headers to append using CEL expressions for values.|
-|`llm.virtualModels[].routing.callout.policies.transformations.request.set`|object|Headers to set using CEL expressions for values.|
-|`llm.virtualModels[].routing.callout.policies.transformations.request.remove`|[]string|Header names to remove.|
-|`llm.virtualModels[].routing.callout.policies.transformations.request.replace`|string|CEL expression that computes the full set of headers, replacing all existing headers.<br>The expression must evaluate to a map of header name to value (a string, or a list of<br>strings for a repeated header). Pseudo-headers (`:method`, `:path`, etc.) are ignored;<br>set those explicitly with `set`/`add`. `replace` is applied before `add`/`set`/`remove`,<br>so those still operate on top of the replaced headers.|
-|`llm.virtualModels[].routing.callout.policies.transformations.request.body`|string|CEL expression that computes a replacement body.|
-|`llm.virtualModels[].routing.callout.policies.transformations.request.metadata`|object|Metadata values to add using CEL expressions.|
-|`llm.virtualModels[].routing.callout.policies.transformations.response`|object|Transform the response before it is returned.|
-|`llm.virtualModels[].routing.callout.policies.transformations.response.add`|object|Headers to append using CEL expressions for values.|
-|`llm.virtualModels[].routing.callout.policies.transformations.response.set`|object|Headers to set using CEL expressions for values.|
-|`llm.virtualModels[].routing.callout.policies.transformations.response.remove`|[]string|Header names to remove.|
-|`llm.virtualModels[].routing.callout.policies.transformations.response.replace`|string|CEL expression that computes the full set of headers, replacing all existing headers.<br>The expression must evaluate to a map of header name to value (a string, or a list of<br>strings for a repeated header). Pseudo-headers (`:method`, `:path`, etc.) are ignored;<br>set those explicitly with `set`/`add`. `replace` is applied before `add`/`set`/`remove`,<br>so those still operate on top of the replaced headers.|
-|`llm.virtualModels[].routing.callout.policies.transformations.response.body`|string|CEL expression that computes a replacement body.|
-|`llm.virtualModels[].routing.callout.policies.transformations.response.metadata`|object|Metadata values to add using CEL expressions.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS`|object|TLS settings used when connecting to this backend.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.cert`|string|Client certificate file to present to the backend.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.key`|string|Private key file for the client certificate.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.root`|string|Root certificate bundle used to verify the backend certificate.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.hostname`|string|Server name to use for TLS verification and SNI.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.insecure`|boolean|Skip certificate trust verification for the backend connection.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.insecureHost`|boolean|Skip hostname verification for the backend certificate.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.alpn`|[]string|ALPN protocols to offer to the backend.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.subjectAltNames`|[]string|Additional subject alternative names accepted for the backend certificate.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.keyExchangeGroups`|[]enum|Key exchange groups allowed for negotiating TLS.<br>Possible values: `X25519`, `P-256`, `P-384`, `X25519_MLKEM768`.|
-|`llm.virtualModels[].routing.callout.policies.backendTLS.spiffe`|object|Get the gateway's client identity and trust roots from the SPIFFE Workload API.<br>Mutually exclusive with `cert`/`key`/`root`/`insecure`/`insecureHost`.<br>Pin specific upstream SPIFFE IDs via `subjectAltNames` (e.g. `spiffe://td/ns/foo/sa/bar`);<br>If `subjectAltNames` is omitted, any SVID chaining to the SPIFFE trust bundle is accepted|
-|`llm.virtualModels[].routing.callout.policies.backendAuth`|object|Authentication credentials sent to this backend.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key`|object||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough`|object|Forward the validated incoming JWT to the backend.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough.location`|object|Where to place the forwarded credential in the backend request.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough.location.header`|object|Read the credential from an HTTP header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough.location.header.name`|string|Header name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough.location.header.prefix`|string|Prefix to remove from the header value before validation, such as `Bearer ` or `Basic `.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough.location.queryParameter`|object|Read the credential from a URL query parameter.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough.location.queryParameter.name`|string|Query parameter name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough.location.cookie`|object|Read the credential from a request cookie.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough.location.cookie.name`|string|Cookie name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.passthrough.location.expression`|string|Read the credential from a CEL expression evaluated against the incoming request.<br>CEL expression that returns the credential string. This location can extract credentials but cannot insert them.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key`|object|Send a configured secret value to the backend.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.value`|object|Secret value to send to the backend. File references are watched, so<br>rotating the file reloads it without a restart.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.value.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.location`|object|Where to place the secret in the backend request.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.location.header`|object|Read the credential from an HTTP header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.location.header.name`|string|Header name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.location.header.prefix`|string|Prefix to remove from the header value before validation, such as `Bearer ` or `Basic `.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.location.queryParameter`|object|Read the credential from a URL query parameter.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.location.queryParameter.name`|string|Query parameter name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.location.cookie`|object|Read the credential from a request cookie.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.location.cookie.name`|string|Cookie name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.key.location.expression`|string|Read the credential from a CEL expression evaluated against the incoming request.<br>CEL expression that returns the credential string. This location can extract credentials but cannot insert them.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.gcp`|object|Authenticate to Google Cloud services.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.gcp.type`|enum|Possible values: `idToken`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.gcp.audience`|string|Audience for the token. If not set, the destination host will be used.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.gcp.credential`|object|ADC-compatible Google credential JSON. If not set, ambient credentials are used.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.gcp.credential.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.gcp.type`|enum|Possible values: `accessToken`, `null`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws`|object|Sign backend requests with AWS credentials.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.accessKeyId`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.secretAccessKey`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.region`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.sessionToken`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.serviceName`|string|AWS SigV4 signing service name (for example, "bedrock", "bedrock-agentcore", or "execute-api").|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.region`|string|AWS SigV4 signing region (for example, "us-east-1"). If unset, typed AWS<br>backends may provide this automatically; otherwise the ambient AWS region<br>is used.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.assumeRole`|object|Optional AWS STS role to assume before signing requests.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.assumeRole.roleArn`|string|AWS IAM role ARN to assume.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.assumeRole.sessionName`|string|Custom session name (RoleSessionName) for CloudTrail and Cost & Usage Report<br>attribution. Either a static string or `{expression: ...}` with a CEL<br>expression evaluated against each request. Max 64 chars, matching<br>`[\w+=,.@-]`. If unset, the AWS SDK generates a random session name.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.assumeRole.sessionName.expression`|string|CEL expression evaluated against each request to produce the session<br>name, for example `jwt.sub` or `request.headers["x-team"]`. If the<br>expression does not produce a valid session name at request time, the<br>request is rejected.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.assumeRole.tags`|[]object|Session tags passed to STS AssumeRole for cost attribution. Once activated as<br>cost allocation tags, each tag surfaces in the AWS Cost & Usage Report under<br>`resourceTags/user:TagKey`. A tag value is either static (`value`) or a CEL<br>expression evaluated against each request (`expression`).|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.assumeRole.tags[].key`|string|Tag key.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.assumeRole.tags[].value`|string|Static tag value.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.assumeRole.tags[].expression`|string|CEL expression evaluated against each request to produce the tag value, for<br>example `jwt.sub` or `request.headers["x-app"]`. If the expression does not<br>produce a valid tag value at request time, the request is rejected.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.aws.assumeRole.externalId`|string|Set when the role's trust policy requires `sts:ExternalId`. 2-1224 chars,<br>matching `[\w+=,.@:/-]`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure`|object|Authenticate to Azure services.<br>Exactly one of explicitConfig, developerImplicit, or implicit may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig`|object|Use explicit Azure credentials<br>Exactly one of clientSecret, managedIdentity, or workloadIdentity may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.clientSecret`|object||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.clientSecret.tenant_id`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.clientSecret.client_id`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.clientSecret.client_secret`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.managedIdentity`|object||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.managedIdentity.userAssignedIdentity`|object||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.managedIdentity.userAssignedIdentity.clientId`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.managedIdentity.userAssignedIdentity.objectId`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.managedIdentity.userAssignedIdentity.resourceId`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.explicitConfig.workloadIdentity`|object||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.developerImplicit`|object|Use implicit Azure auth. Note that this is for developer use-cases only!|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.implicit`|object|Automatically detect authentication method based on environment.<br>Uses Workload Identity on K8s, Managed Identity on Azure VMs, or Developer Tools locally.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.azure.scopes`|[]string|Scopes requested for the Azure access token. When unset, the scope is<br>inferred from the backend hostname.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign`|object|Sign a short-lived JWT with a private key on each request.<br>Signs a short-lived JWT with a private key on each request and sends it to<br>the backend. For upstreams that require per-request keypair JWTs (e.g. the<br>Snowflake SQL API) rather than a static credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.signingKey`|object|PEM-encoded private signing key (RSA or EC, matching `alg`).|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.signingKey.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.alg`|enum|JWS signing algorithm. Defaults to RS256.<br>Possible values: `RS256`, `RS384`, `RS512`, `PS256`, `ES256`, `ES384`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.kid`|string|Optional JWS key ID header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.claims`|object|Static claims added to every token (e.g. iss, sub, aud). Values may be<br>any JSON value (e.g. a string, number, bool, or array). `iat`, `exp`,<br>and `nbf` are reserved for the signer and cannot be configured here.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.claims.*`|any||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.ttl`|string|Token lifetime used for `exp`. Defaults to 300s.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.location`|object|Where the signed token is written. Defaults to the Authorization<br>header with a `Bearer ` prefix.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.location.header`|object|Read the credential from an HTTP header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.location.header.name`|string|Header name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.location.header.prefix`|string|Prefix to remove from the header value before validation, such as `Bearer ` or `Basic `.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.location.queryParameter`|object|Read the credential from a URL query parameter.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.location.queryParameter.name`|string|Query parameter name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.location.cookie`|object|Read the credential from a request cookie.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.location.cookie.name`|string|Cookie name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.jwtSign.location.expression`|string|Read the credential from a CEL expression evaluated against the incoming request.<br>CEL expression that returns the credential string. This location can extract credentials but cannot insert them.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange`|object|Use OAuth token exchange flows to obtain a backend access token.<br>Exactly one of service, host, or backend may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.service`|object|Service reference. Service must be defined in the top level services list.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.service.port`|integer|Port on the target Service to route to.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.host`|string|Hostname or IP address|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.backend`|string|Explicit backend reference. Backend must be defined in the top level backends list|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.policies`|any|Backend policies used when connecting to the service.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.path`|string|Token endpoint path on the backend; defaults to "/".|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.grantType`|enum|Selects which RFC the request follows; defaults to token exchange (RFC 8693).<br>Possible values: `tokenExchange`, `jwtBearer`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken`|object|Where the subject token is read from, and its token type. Defaults to the<br>Authorization Bearer header with token type access_token.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.source`|object|Where the token is read from in the incoming request. The CEL `expression`<br>source is permitted (extraction only).<br>Exactly one of header, queryParameter, cookie, or expression may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.source.header`|object|Read the credential from an HTTP header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.source.header.name`|string|Header name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.source.header.prefix`|string|Prefix to remove from the header value before validation, such as `Bearer ` or `Basic `.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.source.queryParameter`|object|Read the credential from a URL query parameter.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.source.queryParameter.name`|string|Query parameter name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.source.cookie`|object|Read the credential from a request cookie.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.source.cookie.name`|string|Cookie name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.source.expression`|string|Read the credential from a CEL expression evaluated against the incoming request.<br>CEL expression that returns the credential string. This location can extract credentials but cannot insert them.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.subjectToken.tokenType`|string|RFC 8693 token type URN; when omitted defaults to access_token|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken`|object|RFC 8693 delegation actor token. Token-exchange grant only.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.source`|object|Where the actor token is read from in the incoming request. The CEL<br>`expression` source is permitted (extraction only). Unlike subject tokens,<br>actor tokens have no default source.<br>Exactly one of header, queryParameter, cookie, or expression may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.source.header`|object|Read the credential from an HTTP header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.source.header.name`|string|Header name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.source.header.prefix`|string|Prefix to remove from the header value before validation, such as `Bearer ` or `Basic `.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.source.queryParameter`|object|Read the credential from a URL query parameter.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.source.queryParameter.name`|string|Query parameter name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.source.cookie`|object|Read the credential from a request cookie.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.source.cookie.name`|string|Cookie name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.source.expression`|string|Read the credential from a CEL expression evaluated against the incoming request.<br>CEL expression that returns the credential string. This location can extract credentials but cannot insert them.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.tokenType`|string|RFC 8693 actor token type URN; when omitted defaults to access_token and is still sent|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.actorToken.enforceMayAct`|boolean|Enforce that the subject's `may_act` claim authorizes the actor before exchanging.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.audiences`|[]string|`audience` parameters naming the target services at the authorization server.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.scopes`|[]string|`scope` values for the requested token, sent space-delimited.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.resources`|[]string|`resource` parameters with the target service URIs.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.requestedTokenType`|string|`requested_token_type` parameter. When unset it is omitted from the request<br>(RFC 8693 makes it optional). Some providers (e.g. Auth0 custom token exchange)<br>reject an explicit access_token value paired with a custom `subject_token_type`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth`|object|Client authentication used when calling the token endpoint.<br>When unset, no client authentication fields are sent.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.clientId`|string|`client_id` parameter identifying the gateway at the authorization server.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.clientSecret`|object||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.clientSecret.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.method`|enum|Possible values: `clientSecretBasic`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.method`|enum|Possible values: `clientSecretPost`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.signingKey`|object|PEM-encoded private signing key (RSA or EC, matching `alg`).|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.signingKey.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.certificate`|object|PEM-encoded X.509 certificate chain, leaf first. The leaf public key must<br>correspond to `signing_key` for token endpoints to validate assertions.<br>A mismatch or comparison failure is logged and does not prevent loading.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.certificate.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.certificateHeader`|enum|JWS certificate header emitted from `certificate`. Required when `certificate` is set.<br>Possible values: `x5c`, `x5t#S256`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.alg`|enum|Possible values: `RS256`, `RS384`, `RS512`, `PS256`, `ES256`, `ES384`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.kid`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.assertionAudience`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.method`|enum|Possible values: `privateKeyJwt`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.clientAuth.clientSecret`|object|OAuth 2.0 client secret sent via HTTP Basic auth to the authorization server.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.additionalParams`|object|Extra form parameters appended to the token request.<br>Values are CEL expressions evaluated against the incoming request.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.authorizationLocation`|object|Where to place the exchanged token in the backend request. Defaults to the<br>Authorization header with a "Bearer " prefix. The CEL `expression` source is<br>not valid here (it cannot insert).<br>Exactly one of header, queryParameter, cookie, or expression may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.authorizationLocation.header`|object|Read the credential from an HTTP header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.authorizationLocation.header.name`|string|Header name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.authorizationLocation.header.prefix`|string|Prefix to remove from the header value before validation, such as `Bearer ` or `Basic `.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.authorizationLocation.queryParameter`|object|Read the credential from a URL query parameter.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.authorizationLocation.queryParameter.name`|string|Query parameter name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.authorizationLocation.cookie`|object|Read the credential from a request cookie.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.authorizationLocation.cookie.name`|string|Cookie name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.authorizationLocation.expression`|string|Read the credential from a CEL expression evaluated against the incoming request.<br>CEL expression that returns the credential string. This location can extract credentials but cannot insert them.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.cache`|object|Response cache configuration. Defaults to an in-memory cache with 8192 entries and a 300s<br>TTL when the token endpoint omits `expires_in`. Set `maxEntries` to 0 to disable.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.cache.maxEntries`|integer|Maximum number of token exchange responses to keep in the cache. Set to 0 to disable.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.oauthTokenExchange.cache.defaultTtl`|string|TTL used when the token endpoint omits `expires_in`. Defaults to 300s.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess`|object|Use Cross App Access (Identity Assertion / ID-JAG) to obtain a backend access token.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider`|object|The user's IdP authorization server, used for the RFC 8693 token exchange.<br>Exactly one of service, host, or backend may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.service`|object|Service reference. Service must be defined in the top level services list.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.service.port`|integer|Port on the target Service to route to.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.host`|string|Hostname or IP address|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.backend`|string|Explicit backend reference. Backend must be defined in the top level backends list|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.policies`|any|Backend policies used when connecting to the service.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.path`|string|Token endpoint path on the backend; defaults to "/".|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth`|object|Client authentication used when calling the token endpoint.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.clientId`|string|`client_id` parameter identifying the gateway at the authorization server.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.clientSecret`|object||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.clientSecret.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.method`|enum|Possible values: `clientSecretBasic`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.method`|enum|Possible values: `clientSecretPost`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.signingKey`|object|PEM-encoded private signing key (RSA or EC, matching `alg`).|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.signingKey.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.certificate`|object|PEM-encoded X.509 certificate chain, leaf first. The leaf public key must<br>correspond to `signing_key` for token endpoints to validate assertions.<br>A mismatch or comparison failure is logged and does not prevent loading.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.certificate.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.certificateHeader`|enum|JWS certificate header emitted from `certificate`. Required when `certificate` is set.<br>Possible values: `x5c`, `x5t#S256`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.alg`|enum|Possible values: `RS256`, `RS384`, `RS512`, `PS256`, `ES256`, `ES384`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.kid`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.assertionAudience`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.method`|enum|Possible values: `privateKeyJwt`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.identityProvider.clientAuth.clientSecret`|object|OAuth 2.0 client secret sent via HTTP Basic auth to the authorization server.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer`|object|The resource authorization server, which exchanges the ID-JAG for an access token.<br>Exactly one of service, host, or backend may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.service`|object|Service reference. Service must be defined in the top level services list.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.service.port`|integer|Port on the target Service to route to.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.host`|string|Hostname or IP address|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.backend`|string|Explicit backend reference. Backend must be defined in the top level backends list|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.policies`|any|Backend policies used when connecting to the service.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.path`|string|Token endpoint path on the backend; defaults to "/".|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth`|object|Client authentication used when calling the token endpoint.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.clientId`|string|`client_id` parameter identifying the gateway at the authorization server.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.clientSecret`|object||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.clientSecret.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.method`|enum|Possible values: `clientSecretBasic`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.method`|enum|Possible values: `clientSecretPost`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.signingKey`|object|PEM-encoded private signing key (RSA or EC, matching `alg`).|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.signingKey.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.certificate`|object|PEM-encoded X.509 certificate chain, leaf first. The leaf public key must<br>correspond to `signing_key` for token endpoints to validate assertions.<br>A mismatch or comparison failure is logged and does not prevent loading.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.certificate.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.certificateHeader`|enum|JWS certificate header emitted from `certificate`. Required when `certificate` is set.<br>Possible values: `x5c`, `x5t#S256`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.alg`|enum|Possible values: `RS256`, `RS384`, `RS512`, `PS256`, `ES256`, `ES384`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.kid`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.assertionAudience`|string||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.method`|enum|Possible values: `privateKeyJwt`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resourceAuthorizationServer.clientAuth.clientSecret`|object|OAuth 2.0 client secret sent via HTTP Basic auth to the authorization server.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.audience`|string|Identifier of the resource authorization server. The issued ID-JAG is bound to this audience.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.resources`|[]string|`resource` parameters naming the protected resource APIs.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.scopes`|[]string|`scope` values requested when obtaining the ID-JAG from the identity provider, sent<br>space-delimited.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.accessTokenScopes`|[]string|`scope` values requested when exchanging the ID-JAG for an access token. When unset,<br>inherits `scopes`. When empty, omits `scope`.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken`|object|Subject token sent to the identity provider. Defaults to an OpenID Connect ID token read<br>from the Authorization Bearer header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.source`|object|Where to read the subject token. Defaults to the Authorization Bearer header.<br>Exactly one of header, queryParameter, cookie, or expression may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.source.header`|object|Read the credential from an HTTP header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.source.header.name`|string|Header name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.source.header.prefix`|string|Prefix to remove from the header value before validation, such as `Bearer ` or `Basic `.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.source.queryParameter`|object|Read the credential from a URL query parameter.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.source.queryParameter.name`|string|Query parameter name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.source.cookie`|object|Read the credential from a request cookie.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.source.cookie.name`|string|Cookie name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.source.expression`|string|Read the credential from a CEL expression evaluated against the incoming request.<br>CEL expression that returns the credential string. This location can extract credentials but cannot insert them.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.subjectToken.tokenType`|string|RFC 8693 subject token type URI. Defaults to an OpenID Connect ID token.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.cache`|object|Response cache configuration. Defaults to an in-memory cache with 8192 entries and a 300s<br>TTL when the token endpoint omits `expires_in`. Set `maxEntries` to 0 to disable.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.cache.maxEntries`|integer|Maximum number of token exchange responses to keep in the cache. Set to 0 to disable.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.crossAppAccess.cache.defaultTtl`|string|TTL used when the token endpoint omits `expires_in`. Defaults to 300s.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials`|[]object||
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].location`|object|Where the credential is inserted on the backend request.<br>Exactly one of header, queryParameter, cookie, or expression may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].location.header`|object|Read the credential from an HTTP header.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].location.header.name`|string|Header name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].location.header.prefix`|string|Prefix to remove from the header value before validation, such as `Bearer ` or `Basic `.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].location.queryParameter`|object|Read the credential from a URL query parameter.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].location.queryParameter.name`|string|Query parameter name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].location.cookie`|object|Read the credential from a request cookie.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].location.cookie.name`|string|Cookie name containing the credential.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].location.expression`|string|Read the credential from a CEL expression evaluated against the incoming request.<br>CEL expression that returns the credential string. This location can extract credentials but cannot insert them.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].key`|object|Credential value.|
-|`llm.virtualModels[].routing.callout.policies.backendAuth.credentials[].key.file`|string|Path to a file on disk to load the value from.|
-|`llm.virtualModels[].routing.callout.policies.http`|object|HTTP protocol settings for this backend.|
-|`llm.virtualModels[].routing.callout.policies.http.version`|string|HTTP version to use when connecting to the backend.|
-|`llm.virtualModels[].routing.callout.policies.http.requestTimeout`|string|Maximum time allowed for a backend HTTP request.|
-|`llm.virtualModels[].routing.callout.policies.http.maxConnectionDuration`|string|Maximum time a connection to the backend may stay open. A connection past this duration is<br>not reused for new requests; a fresh connection is established instead, while in-flight<br>requests are not interrupted.|
-|`llm.virtualModels[].routing.callout.policies.tcp`|object|TCP protocol settings for this backend.|
-|`llm.virtualModels[].routing.callout.policies.tcp.keepalives`|object|TCP keepalive settings for backend connections.|
-|`llm.virtualModels[].routing.callout.policies.tcp.keepalives.enabled`|boolean|Enable TCP keepalive probes on backend connections. Defaults to true.|
-|`llm.virtualModels[].routing.callout.policies.tcp.keepalives.time`|string|Idle time before the first keepalive probe is sent.|
-|`llm.virtualModels[].routing.callout.policies.tcp.keepalives.interval`|string|Time between successive keepalive probes.|
-|`llm.virtualModels[].routing.callout.policies.tcp.keepalives.retries`|integer|Number of unacknowledged probes before the connection is considered dead.|
-|`llm.virtualModels[].routing.callout.policies.tcp.connectTimeout`|string|Maximum time allowed to establish a backend TCP connection.|
-|`llm.virtualModels[].routing.callout.policies.backendTunnel`|object|Tunnel settings used when connecting to this backend.|
-|`llm.virtualModels[].routing.callout.policies.backendTunnel.proxy`|object|Proxy backend used to tunnel the connection.<br>Exactly one of service, host, or backend may be set.|
-|`llm.virtualModels[].routing.callout.policies.backendTunnel.proxy.service`|object|Service reference. Service must be defined in the top level services list.|
-|`llm.virtualModels[].routing.callout.policies.backendTunnel.proxy.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
-|`llm.virtualModels[].routing.callout.policies.backendTunnel.proxy.service.port`|integer|Port on the target Service to route to.|
-|`llm.virtualModels[].routing.callout.policies.backendTunnel.proxy.host`|string|Hostname or IP address|
-|`llm.virtualModels[].routing.callout.policies.backendTunnel.proxy.backend`|string|Explicit backend reference. Backend must be defined in the top level backends list|
-|`llm.virtualModels[].routing.callout.policies.backendTunnel.mode`|enum|How requests are sent through the proxy.<br>Possible values: `auto`, `connect`.|
-|`llm.virtualModels[].routing.callout.policies.backendTunnel.policies`|any|Policies to connect to the proxy backend|
+|`llm.virtualModels[].routing.callout.policies`|[`<BackendPolicies>`](#backendpolicies)|Backend policies used when connecting to the service.|
 |`llm.virtualModels[].routing.callout.headers`|object|Headers to set on the callout request, computed from CEL expressions.<br>Keys may be header names or the `:path`, `:method`, and `:authority` pseudo-headers.|
 |`llm.virtualModels[].routing.callout.body`|string|CEL expression that computes the callout request body.<br>Strings and bytes are used directly; other values are JSON-encoded.<br>If unset, the original request body is forwarded.|
 |`llm.virtualModels[].routing.callout.transformation`|object|CEL expressions that compute request payload fields from the callout response, overriding existing values.<br>`callout.headers` holds the response headers and `callout.body` the decoded JSON response body.<br>`model` is required and selects the target from `llm.models`.|
 |`llm.virtualModels[].routing.callout.failureMode`|object|Behavior when the callout fails, returns a non-2xx or non-JSON response, or selects an unknown model.<br>Defaults to `failClosed`.|
 |`llm.virtualModels[].routing.callout.failureMode.fallback`|string|Route to this model, which is resolved against llm.models, without applying `transformation`.|
-|`llm.virtualModels[].routing.callout.cache`|object|Reuse callout responses using CEL expressions as the cache key.<br>On a cache hit, `transformation` is evaluated against the cached response.<br>Keying on a session identifier makes routing sticky for that session.|
+|`llm.virtualModels[].routing.callout.cache`|object|Reuse callout responses using CEL expressions as the cache key.<br>On a cache hit, `transformation` is evaluated against the cached response.<br>Keying on a session identifier makes routing sticky for that session.<br>The TTL is evaluated with `callout` available, before `transformation` is applied.|
 |`llm.virtualModels[].routing.callout.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`llm.virtualModels[].routing.callout.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`llm.virtualModels[].routing.callout.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`llm.virtualModels[].routing.callout.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`llm.virtualModels[].routing.callout.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`llm.policies`|object|policies defines policies for handling incoming requests, before a model is selected|
 |`llm.policies.oidc`|object|Authenticate browser requests with OIDC authorization code flow.|
 |`llm.policies.oidc.issuer`|string|Issuer used for discovery and ID token validation.|
@@ -6160,10 +5887,10 @@
 |`llm.policies.extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`llm.policies.extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`llm.policies.extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`llm.policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`llm.policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`llm.policies.extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`llm.policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`llm.policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`llm.policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`llm.policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`llm.policies.extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`llm.policies.extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`llm.policies.extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -6188,10 +5915,10 @@
 |`llm.policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`llm.policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`llm.policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`llm.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`llm.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`llm.policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`llm.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`llm.policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`llm.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`llm.policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`llm.policies.extProc`|object|Send request and response data to an external processing service.|
 |`llm.policies.extProc.conditional`|[]object|conditional policy entries. An entry without a condition must be the final fallback.|
 |`llm.policies.extProc.conditional[].service`|object|Service reference. Service must be defined in the top level services list.|
@@ -6691,10 +6418,10 @@
 |`mcp.policies.extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`mcp.policies.extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`mcp.policies.extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`mcp.policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`mcp.policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`mcp.policies.extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`mcp.policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`mcp.policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`mcp.policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`mcp.policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`mcp.policies.extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`mcp.policies.extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`mcp.policies.extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -6719,10 +6446,10 @@
 |`mcp.policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`mcp.policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`mcp.policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`mcp.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`mcp.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`mcp.policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`mcp.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`mcp.policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`mcp.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`mcp.policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`mcp.policies.extProc`|object|Send request and response data to an external processing service.|
 |`mcp.policies.extProc.conditional`|[]object|conditional policy entries. An entry without a condition must be the final fallback.|
 |`mcp.policies.extProc.conditional[].service`|object|Service reference. Service must be defined in the top level services list.|
@@ -6934,10 +6661,10 @@
 |`ui.policies.extAuthz.conditional[].includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`ui.policies.extAuthz.conditional[].includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`ui.policies.extAuthz.conditional[].includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`ui.policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`ui.policies.extAuthz.conditional[].cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`ui.policies.extAuthz.conditional[].cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`ui.policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`ui.policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`ui.policies.extAuthz.conditional[].cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`ui.policies.extAuthz.conditional[].cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`ui.policies.extAuthz.service`|object|Service reference. Service must be defined in the top level services list.|
 |`ui.policies.extAuthz.service.name`|string|Name of the target Service, as defined in the top-level `services` list.|
 |`ui.policies.extAuthz.service.port`|integer|Port on the target Service to route to.|
@@ -6962,10 +6689,10 @@
 |`ui.policies.extAuthz.includeRequestBody.maxRequestBytes`|integer|Maximum request body size to send to the authorization service. Defaults to 8192 bytes.|
 |`ui.policies.extAuthz.includeRequestBody.allowPartialMessage`|boolean|Whether to send a partial body when the request exceeds `maxRequestBytes`.|
 |`ui.policies.extAuthz.includeRequestBody.packAsBytes`|boolean|Whether to send the body as raw bytes for gRPC authorization checks.|
-|`ui.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.|
+|`ui.policies.extAuthz.cache`|object|Cache authorization results using CEL expressions as the cache key.<br>Warning: the safety of this feature depends on the cache key accurately capturing the fields<br>the server operates on. For example, if you return a different result based on header A but only<br>cache header B, users may get incorrect cache hits.<br>The TTL is evaluated after the authorization response has been applied to the request.|
 |`ui.policies.extAuthz.cache.key`|[]string|CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.|
-|`ui.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached authorization results are reused.<br>The expression is evaluated after the authorization response has been applied<br>to the request, and must return either a duration or timestamp.|
-|`ui.policies.extAuthz.cache.maxEntries`|integer|Maximum number of authorization results to keep in the cache.|
+|`ui.policies.extAuthz.cache.ttl`|string|CEL expression that returns how long cached results are reused.<br>Must return either a duration or timestamp.|
+|`ui.policies.extAuthz.cache.maxEntries`|integer|Maximum number of results to keep in the cache.|
 |`ui.policies.basicAuth`|object|Authenticate incoming requests with Basic Auth credentials from an htpasswd user database.|
 |`ui.policies.basicAuth.htpasswd`|object|User database in htpasswd format. Can be inline or loaded from a file.|
 |`ui.policies.basicAuth.htpasswd.file`|string|Path to a file on disk to load the value from.|

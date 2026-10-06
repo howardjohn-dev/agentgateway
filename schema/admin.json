@@ -1249,7 +1249,7 @@
           "default": "failClosed"
         },
         "cache": {
-          "description": "Reuse callout responses using CEL expressions as the cache key.\nOn a cache hit, `transformation` is evaluated against the cached response.\nKeying on a session identifier makes routing sticky for that session.",
+          "description": "Reuse callout responses using CEL expressions as the cache key.\nOn a cache hit, `transformation` is evaluated against the cached response.\nKeying on a session identifier makes routing sticky for that session.\nThe TTL is evaluated with `callout` available, before `transformation` is applied.",
           "anyOf": [
             {
               "$ref": "#/$defs/CacheConfig"
@@ -1692,7 +1692,7 @@
               ]
             },
             {
-              "description": "Send a configured secret value to the backend.",
+              "description": "Send a configured secret value, or a value computed from the request, to the backend.\nExactly one of `value` or `expression` must be set.",
               "type": "object",
               "properties": {
                 "key": {
@@ -1700,7 +1700,26 @@
                   "properties": {
                     "value": {
                       "description": "Secret value to send to the backend. File references are watched, so\nrotating the file reloads it without a restart.",
-                      "$ref": "#/$defs/FileOrInline"
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/FileOrInline"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "expression": {
+                      "description": "CEL expression evaluated against the request to produce the value to send.\nIf it fails or does not return a string, the target location is cleared instead.",
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/Expression"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     },
                     "location": {
                       "description": "Where to place the secret in the backend request.",
@@ -1716,7 +1735,8 @@
                   },
                   "additionalProperties": false,
                   "required": [
-                    "value"
+                    "value",
+                    "expression"
                   ]
                 }
               },
@@ -2975,14 +2995,34 @@
           "$ref": "#/$defs/AuthorizationLocation"
         },
         "key": {
-          "description": "Credential value.",
-          "$ref": "#/$defs/FileOrInline"
+          "description": "Credential value. Exactly one of `key` or `expression` must be set.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FileOrInline"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expression": {
+          "description": "CEL expression evaluated against the request to produce the credential value.\nIf it fails or does not return a string, the credential location is cleared instead.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Expression"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "additionalProperties": false,
       "required": [
         "location",
-        "key"
+        "key",
+        "expression"
       ]
     },
     "BackendAuth": {
@@ -3015,7 +3055,7 @@
           "additionalProperties": false
         },
         {
-          "description": "Send a configured secret value to the backend.",
+          "description": "Send a configured secret value, or a value computed from the request, to the backend.\nExactly one of `value` or `expression` must be set.",
           "type": "object",
           "properties": {
             "key": {
@@ -3023,7 +3063,26 @@
               "properties": {
                 "value": {
                   "description": "Secret value to send to the backend. File references are watched, so\nrotating the file reloads it without a restart.",
-                  "$ref": "#/$defs/FileOrInline"
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/FileOrInline"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "expression": {
+                  "description": "CEL expression evaluated against the request to produce the value to send.\nIf it fails or does not return a string, the target location is cleared instead.",
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/Expression"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
                 },
                 "location": {
                   "description": "Where to place the secret in the backend request.",
@@ -3039,7 +3098,8 @@
               },
               "additionalProperties": false,
               "required": [
-                "value"
+                "value",
+                "expression"
               ]
             }
           },
@@ -3361,11 +3421,11 @@
           }
         },
         "ttl": {
-          "description": "CEL expression that returns how long cached authorization results are reused.\nThe expression is evaluated after the authorization response has been applied\nto the request, and must return either a duration or timestamp.",
+          "description": "CEL expression that returns how long cached results are reused.\nMust return either a duration or timestamp.",
           "$ref": "#/$defs/Expression"
         },
         "maxEntries": {
-          "description": "Maximum number of authorization results to keep in the cache.",
+          "description": "Maximum number of results to keep in the cache.",
           "type": "integer",
           "format": "uint",
           "minimum": 0,

@@ -158,12 +158,11 @@ impl Default for Protocol {
 pub struct CacheConfig {
 	/// CEL expressions that make up the cache key. Empty keys are accepted, but do not produce cache hits.
 	pub key: Vec<Arc<cel::Expression>>,
-	/// CEL expression that returns how long cached authorization results are reused.
-	/// The expression is evaluated after the authorization response has been applied
-	/// to the request, and must return either a duration or timestamp.
+	/// CEL expression that returns how long cached results are reused.
+	/// Must return either a duration or timestamp.
 	#[serde(deserialize_with = "crate::cel::de_duration_or_expression")]
 	pub ttl: Arc<cel::Expression>,
-	/// Maximum number of authorization results to keep in the cache.
+	/// Maximum number of results to keep in the cache.
 	#[serde(default = "default_cache_entries")]
 	pub max_entries: usize,
 }
@@ -206,6 +205,7 @@ pub struct ExtAuthz {
 	/// Warning: the safety of this feature depends on the cache key accurately capturing the fields
 	/// the server operates on. For example, if you return a different result based on header A but only
 	/// cache header B, users may get incorrect cache hits.
+	/// The TTL is evaluated after the authorization response has been applied to the request.
 	#[serde(default, skip_serializing_if = "Option::is_none")]
 	pub cache: Option<CacheConfig>,
 	#[serde(skip, default = "default_cache_store")]

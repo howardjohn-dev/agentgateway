@@ -49,6 +49,7 @@ pub struct VirtualModelCallout {
 	/// Reuse callout responses using CEL expressions as the cache key.
 	/// On a cache hit, `transformation` is evaluated against the cached response.
 	/// Keying on a session identifier makes routing sticky for that session.
+	/// The TTL is evaluated with `callout` available, before `transformation` is applied.
 	#[serde(default, skip_serializing_if = "Option::is_none")]
 	pub cache: Option<CacheConfig>,
 	#[serde(skip)]
@@ -98,7 +99,15 @@ impl VirtualModelCallout {
 		let response = match cache_key.as_ref().and_then(|key| self.cached(key)) {
 			Some(response) => response,
 			None => {
-				let callout_req = self.build_request(req, llm_request)?;
+				// Without a parsed JSON body (path or multipart requests), forward the raw body.
+				let raw_body = match (&self.body, llm_request) {
+					(None, None) => match http::inspect_body(req).await? {
+						http::BodyInspection::Complete(body) => Some(body),
+						http::BodyInspection::Partial(_) => bail!("request body exceeds the buffer limit"),
+					},
+					_ => None,
+				};
+				let callout_req = self.build_request(req, llm_request, raw_body)?;
 				let response = Arc::new(self.call(client, callout_req).await?);
 				if let Some(key) = cache_key {
 					self.insert_cache(key, req, llm_request, &response);
@@ -179,21 +188,30 @@ impl VirtualModelCallout {
 		&self,
 		req: &Request,
 		llm_request: Option<&JsonValue>,
+		raw_body: Option<Bytes>,
 	) -> anyhow::Result<Request> {
 		let exec = executor(req, llm_request);
-		let body = match &self.body {
-			Some(expr) => cel::value_as_byte_or_json(exec.eval(expr)?)?,
-			None => llm_request
-				.map(serde_json::to_vec)
-				.transpose()?
-				.map(Bytes::from)
-				.unwrap_or_default(),
+		let json = HeaderValue::from_static("application/json");
+		let (body, content_type) = match (&self.body, raw_body) {
+			(Some(expr), _) => (cel::value_as_byte_or_json(exec.eval(expr)?)?, json),
+			(None, Some(raw_body)) => (
+				raw_body,
+				req.headers().get(CONTENT_TYPE).cloned().unwrap_or(json),
+			),
+			(None, None) => (
+				llm_request
+					.map(serde_json::to_vec)
+					.transpose()?
+					.map(Bytes::from)
+					.unwrap_or_default(),
+				json,
+			),
 		};
 		let path = self.target.path.as_ref().map_or("/", |path| path.as_str());
 		let mut callout_req = ::http::Request::builder()
 			.method(Method::POST)
 			.uri(path)
-			.header(CONTENT_TYPE, HeaderValue::from_static("application/json"))
+			.header(CONTENT_TYPE, content_type)
 			.body(http::Body::from(body))?;
 		for (k, expr) in &self.headers {
 			let value = HeaderOrPseudoValue::from_cel_result(k, exec.eval(expr).ok());
