@@ -54,19 +54,11 @@ runs:
       ln -s "$cache_root/registry" "$cargo_home/registry"
       ln -s "$cache_root/git" "$cargo_home/git"
 
-  - name: Enable Rust cache access tracking
-    if: ${{ runner.os == 'Linux' }}
-    shell: bash
-    run: |
-      if mountpoint -q .github/rust-cache; then
-        sudo mount -o remount,strictatime .github/rust-cache
-      fi
-
-  # Composite post steps run in reverse order, so this sweeps target before
-  # Sticky Disk snapshots it.
-  - name: Track used Rust build artifacts
-    if: ${{ runner.os == 'Linux' }}
-    uses: BD103/cargo-sweep@28e53e462f3658c03a16ebd79651d2c168a27d4d # v2
+  # Post steps run in reverse order, so this cleans the cache before Sticky
+  # Disk snapshots it.
+  - name: Register Rust cache cleanup
+    if: ${{ runner.os == 'Linux' && inputs.save == 'true' }}
+    uses: ./.github/actions/rust-build-cache-clean
 
   - name: Set Rust cache generation
     if: ${{ runner.os == 'Linux' }}

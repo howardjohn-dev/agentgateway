@@ -1,0 +1,8 @@
+name: Clean Rust build cache
+description: Remove Rust artifacts that are no longer in the Cargo dependency graph
+
+runs:
+  using: node24
+  main: noop.js
+  post: clean.js
+  post-if: success()
