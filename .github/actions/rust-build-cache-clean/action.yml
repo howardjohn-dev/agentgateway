@@ -1,8 +1,13 @@
 name: Clean Rust build cache
 description: Remove Rust artifacts that are no longer in the Cargo dependency graph
 
+inputs:
+  save:
+    description: Merge cleaned target artifacts into the Sticky Disk
+    required: true
+
 runs:
   using: node24
-  main: noop.js
-  post: clean.js
-  post-if: success()
+  main: noop.cjs
+  post: clean.cjs
+  post-if: always()

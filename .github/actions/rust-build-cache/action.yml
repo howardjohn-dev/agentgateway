@@ -39,7 +39,7 @@ runs:
     if: ${{ runner.os == 'Linux' }}
     uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1.7.2
     with:
-      key: ${{ github.repository }}-rust-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
+      key: ${{ github.repository }}-rust-overlay-v1-${{ inputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
       path: .github/rust-cache
       commit: ${{ inputs.save }}
 
@@ -49,16 +49,43 @@ runs:
     run: |
       cache_root="$GITHUB_WORKSPACE/.github/rust-cache"
       cargo_home="${{ steps.cargo-home.outputs.path }}"
+      overlay_root="$RUNNER_TEMP/rust-cache-overlay"
       mkdir -p "$cache_root/target" "$cache_root/registry" "$cache_root/git" "$cargo_home"
-      ln -s "$cache_root/target" target
+      mkdir -p "$overlay_root/upper" "$overlay_root/work" target
+
+      if [[ "${{ inputs.save }}" == "true" ]]; then
+        overlay_tools="$RUNNER_TEMP/overlayfs-tools"
+        mkdir -p "$overlay_tools"
+        curl --fail --silent --show-error --location \
+          https://github.com/kmxz/overlayfs-tools/archive/11ed6b4776bb9c68cf76652321e754c19549b58a.tar.gz \
+          --output "$overlay_tools/source.tar.gz"
+        tar -xzf "$overlay_tools/source.tar.gz" -C "$overlay_tools" --strip-components=1
+        sed -i 's/fprintf(f, "set -x\\n");/fprintf(f, "set -eu\\n");/' "$overlay_tools/sh.c"
+        gcc -O2 -DOVERLAYFS_TOOLS_VERSION='"2025.01"' \
+          "$overlay_tools/main.c" "$overlay_tools/logic.c" \
+          "$overlay_tools/sh.c" "$overlay_tools/common.c" \
+          -o "$overlay_tools/overlay"
+        echo "RUST_CACHE_OVERLAY_TOOL=$overlay_tools/overlay" >> "$GITHUB_ENV"
+      fi
+
+      sudo mount -t overlay overlay \
+        -o "lowerdir=$cache_root/target,upperdir=$overlay_root/upper,workdir=$overlay_root/work,index=off,metacopy=off,redirect_dir=off" \
+        target
+
+      echo "RUST_CACHE_OVERLAY_MOUNT=$GITHUB_WORKSPACE/target" >> "$GITHUB_ENV"
+      echo "RUST_CACHE_OVERLAY_LOWER=$cache_root/target" >> "$GITHUB_ENV"
+      echo "RUST_CACHE_OVERLAY_UPPER=$overlay_root/upper" >> "$GITHUB_ENV"
       ln -s "$cache_root/registry" "$cargo_home/registry"
       ln -s "$cache_root/git" "$cargo_home/git"
 
-  # Post steps run in reverse order, so this cleans the cache before Sticky
-  # Disk snapshots it.
+  # Post steps run in reverse order, so this cleans and merges the ephemeral
+  # target overlay before Sticky Disk snapshots it. On read-only consumers it
+  # only unmounts the overlay and discards the upper layer.
   - name: Register Rust cache cleanup
-    if: ${{ runner.os == 'Linux' && inputs.save == 'true' }}
+    if: ${{ runner.os == 'Linux' }}
     uses: ./.github/actions/rust-build-cache-clean
+    with:
+      save: ${{ inputs.save }}
 
   - name: Set Rust cache generation
     if: ${{ runner.os == 'Linux' }}
