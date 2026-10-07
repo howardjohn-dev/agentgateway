@@ -68,7 +68,25 @@ def clean_registry(registry: Path, packages: list[dict]) -> None:
     package_versions = {f"{package['name']}-{package['version']}" for package in packages}
     crate_files = {f"{package}.crate" for package in package_versions}
 
-    for root_name, keep in (("cache", crate_files), ("src", package_versions)):
+    index = registry / "index"
+    package_names = {package["name"] for package in packages}
+    if index.is_dir():
+        for registry_dir in index.iterdir():
+            if not registry_dir.is_dir():
+                continue
+            if (registry_dir / ".git").is_dir():
+                cache = registry_dir / ".cache"
+                if cache.exists():
+                    remove(cache)
+            else:
+                clean_registry_index(registry_dir, package_names)
+
+    sys_sources = {
+        f"{package['name']}-{package['version']}"
+        for package in packages
+        if package["name"].endswith("-sys")
+    }
+    for root_name, keep in (("cache", crate_files), ("src", sys_sources)):
         root = registry / root_name
         if not root.is_dir():
             continue
@@ -78,6 +96,21 @@ def clean_registry(registry: Path, packages: list[dict]) -> None:
             for path in registry_dir.iterdir():
                 if path.name not in keep:
                     remove(path)
+
+
+def clean_registry_index(directory: Path, package_names: set[str]) -> bool:
+    empty = True
+    for path in directory.iterdir():
+        if path.is_dir():
+            if clean_registry_index(path, package_names):
+                remove(path)
+            else:
+                empty = False
+        elif path.name in package_names:
+            empty = False
+        else:
+            remove(path)
+    return empty
 
 
 def clean_git(cargo_home: Path, packages: list[dict]) -> None:
